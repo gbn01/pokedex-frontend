@@ -51,11 +51,10 @@ const SimpleDialog = ({ open, onClose }: SimpleDialogProps) => {
         }
     }
 
-    const handleNameChange = (value: string) => {
-        setName(value);
+    const handleSearchPokemon = async () => {
         const fetchPokemon = async () => {
             try {
-                const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${value.toLowerCase()}`, { headers: { 'Content-Type': 'application/json' } });
+                const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`, { headers: { 'Content-Type': 'application/json' } });
                 if(response.status === 200) {
                     setPokemon({...response.data, image: response.data.sprites.other['official-artwork'].front_default});
                     setType(response.data.types[0].type.name.charAt(0).toUpperCase() + response.data.types[0].type.name.slice(1));
@@ -82,7 +81,11 @@ const SimpleDialog = ({ open, onClose }: SimpleDialogProps) => {
         <Dialog open={open} onClose={handleClose} fullWidth>
             <DialogTitle>Add Pokemon</DialogTitle>
             <DialogContent style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px'}}>
-                <TextField label="Name" variant="outlined" type="text" style={{width: '100%'}} onChange={(e) => handleNameChange(e.target.value)}/>
+                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '20px'}}>
+                    <TextField label="Name" variant="outlined" type="text" style={{width: '100%'}} onChange={(e) => setName(e.target.value)}/>
+                    <Button variant="contained" color="primary" onClick={handleSearchPokemon}>Search</Button>
+                </div>
+                
                 <img src={pokemon?.image} alt={pokemon?.name} style={{width: '15%', height: '15%'}}/>
                 <TextField label="Type" slotProps={{input: {readOnly: true}}} variant="outlined" type="text" style={{width: '100%'}} value={type}/>
                 <Select label="Abilities" multiple value={selectedAbilities} style={{width: '100%'}} onChange={(e) => handleSelectAbilities(e.target.value)}>
