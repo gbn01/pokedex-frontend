@@ -4,6 +4,8 @@ import { useAuth } from "../context/AuthContext"
 import { Pokemon } from "../types/Pokemon"
 import axios from "axios"
 import { typesEnum } from "../utils/TypeEnum"
+import PokemonBlock from "../components/PokemonBlock"
+import PokedexHeader from "../components/PokedexHeader"
 
 const Pokedex = () => {
 
@@ -18,25 +20,28 @@ const Pokedex = () => {
 
       for (const pokemon of response.data) {
         const fetchedType = await axios.get(`https://pokeapi.co/api/v2/type/${typesEnum[pokemon.type.name as keyof typeof typesEnum]}`)
+        const fetchedImage = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemon.name.toLowerCase()}`)
+        const image = fetchedImage.data.sprites.other['official-artwork'].front_default
         const type_image = fetchedType.data.sprites['generation-viii']['brilliant-diamond-and-shining-pearl']['name_icon']
         console.log(type_image)
-        finalPokemons.push({...pokemon, type_image})
+        finalPokemons.push({...pokemon, type_image, image})
       }
 
-      console.log(finalPokemons)
 
       setPokemons(finalPokemons)
     }
     fetchPokemon()
   }, [token])
+
   return (
-    <div>
+    <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '15px', padding: '10px', width: '100%'}}>
       <h1>Pokedex</h1>
-      {pokemons.map((pokemon) => (
-        <div key={pokemon.id}>
-          <h2>{pokemon.name}</h2>
-        </div>
-      ))}
+      <PokedexHeader />
+      <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '10px', flexWrap: 'wrap'}}>
+        { pokemons.length > 0 && pokemons.map((pokemon) => (
+          <PokemonBlock key={pokemon.id} {...pokemon} />
+        ))}
+      </div>
     </div>
   )
 }
