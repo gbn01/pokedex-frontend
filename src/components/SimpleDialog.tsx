@@ -32,6 +32,11 @@ const SimpleDialog = ({ open, onClose }: SimpleDialogProps) => {
     }, [token, type]);
 
     const handleClose = () => {
+        setName('');
+        setType('');
+        setAbilities([]);
+        setSelectedAbilities([]);
+        setPokemon(null);
         onClose();
     }
 
@@ -45,8 +50,8 @@ const SimpleDialog = ({ open, onClose }: SimpleDialogProps) => {
             }
             console.log(pokemon);
             const response = await api.post('/pokemons/add-to-trainer', pokemon, { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`, 'Access-Control-Allow-Origin': '*' } });
-            if(response.status === 200) {
-                onClose();
+            if(response.status === 201) {
+                handleClose();
             }
         }
     }

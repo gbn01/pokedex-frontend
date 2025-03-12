@@ -15,6 +15,9 @@ const weaknessesEnum = {
     "Dark": ["Fighting", "Bug", "Fairy"],
     "Steel": ["Fire", "Fighting", "Ground"],
     "Fairy": ["Poison", "Steel"],
+    "Dragon": ["Ice", "Dragon", "Fairy"],
+    "Normal": ["Fighting"],
+    "Rock": ["Water", "Grass", "Fighting", "Ground", "Steel"],
 }
 
 export default weaknessesEnum;
